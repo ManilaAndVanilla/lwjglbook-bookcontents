@@ -1,12 +1,12 @@
 # Chapter 08 - Camera
 
-In this chapter we will learn how to move inside a rendered 3D scene. This capability is like having a camera that can travel inside the 3D world and in fact that's the term used to refer to it.
+In this chapter we will learn how to move inside a rendered 3D scene. This is like having a camera that can travel inside the 3D world and in fact that's the term used to refer to it.
 
 You can find the complete source code for this chapter [here](https://github.com/lwjglgamedev/lwjglbook/tree/main/chapter-08).
 
 ## Camera introduction
 
-If you try to search for specific camera functions in OpenGL you will discover that there is no camera concept, or in other words the camera is always fixed, centered in the (0, 0, 0) position at the center of the screen. So what we will do is a simulation that gives us the impression that we have a camera capable of moving inside the 3D scene. How do we achieve this? Well, if we cannot move the camera then we must move all the objects contained in our 3D space at once. In other words, if we cannot move a camera we will move the whole world.
+If you try to search for specific camera functions in OpenGL you will discover that there is no camera concept. In other words, the camera is always fixed, centered in the (0, 0, 0) position at the center of the screen. So we will make a simulation that gives us the impression that we have a camera capable of moving inside the 3D scene. How do we achieve this? Well, if we cannot move the camera then we must move all the objects contained in our 3D space at once. In other words, if we cannot move a camera we will move the whole world.
 
 Hence, suppose that we would like to move the camera position along the z axis from a starting position (Cx, Cy, Cz) to a position (Cx, Cy, Cz+dz) to get closer to the object which is placed at the coordinates (Ox, Oy, Oz).
 
@@ -20,7 +20,7 @@ A camera can be displaced along the three axis (x, y and z) and also can rotate 
 
 ![Roll pitch and yaw](../.gitbook/assets/roll_pitch_yaw.png)
 
-So basically what we must do is to be able to move and rotate all of the objects of our 3D world. How are we going to do this? The answer is to apply another transformation that will translate all of the vertices of all of the objects in the opposite direction of the movement of the camera and that will rotate them according to the camera rotation. This will be done of course with another matrix, the so called view matrix. This matrix will first perform the translation and then the rotation along the axis.
+So basically what we must do is to be able to move and rotate all of the objects of our 3D world. How are we going to do this? The answer is to apply another transformation that will translate all of the vertices of all of the objects in the opposite direction of the movement of the camera and that will rotate them according to the camera rotation. This will be done of course with another matrix: the view matrix. This matrix will first perform the translation and then the rotation along the axis.
 
 Let's see how we can construct that matrix. If you remember from the transformations chapter our transformation equation was like this:
 
@@ -129,7 +129,7 @@ public class Camera {
 }
 ```
 
-As you can see, besides rotation and position we define some vectors to define forward up and right directions. This is because we are implementing a free space movement camera, and when we rotate it if we want to move forward we just want to move where the camera is pointing, not to predefined axis. We need to get those vectors to calculate where the next position will be placed. And finally, at the end the state of the camera is stored into a 4x4 matrix, the view matrix, so any time we change position or rotation we need to update it. As you can see, when updating thew view matrix, we first need to do the rotation and then the translation. If we did the opposite we would not be rotating along the camera position but along the coordinates origin.
+As you can see, besides rotation and position we define some vectors to define forward up and right directions. This is because we are implementing a free space movement camera, and when we rotate it if we want to move forward we just want to move where the camera is pointing, not on a predefined axis. We need to get those vectors to calculate the camera's new position. And finally, at the end the state of the camera is stored into a 4x4 matrix, the view matrix, so any time we change position or rotation we need to update it. As you can see, when updating thew view matrix, we first need to do the rotation and then the translation. If we did the opposite we would not be rotating along the camera position but along the coordinates origin.
 
 The `Camera` class also provides methods to update position when moving forward, up or to the right. In these methods, the view matrix is used to calculate where the forward, up or right methods should be according to current state, and increases the position accordingly. We use the fantastic JOML library to these calculations for us while maintaining the code quite simple.
 
@@ -154,7 +154,7 @@ public class Scene {
 }
 ```
 
-It would be nice to control de camera with our mouse. In order to do so, we will create a new class to handle mouse events so we can use them to update camera rotation. Here's the code for that class.
+It would be nice to control the camera with our mouse. In order to do so, we will create a new class to handle mouse events so we can use them to update camera rotation. Here's the code for that class.
 
 ```java
 package org.lwjglb.engine;
@@ -255,7 +255,7 @@ public class Window {
 }
 ```
 
-In the `Engine` class we will consume mouse input when handling regular input:
+In the `Engine` class we will take in mouse input when handling regular input:
 
 ```java
 public class Engine {
@@ -313,7 +313,7 @@ public class SceneRender {
 }
 ```
 
-And that’s all, our base code supports the concept of a camera. Now we need to use it. We can change the way we handle the input and update the camera. We will set the following controls:
+And that’s all. Our base code supports the concept of a camera. Now we need to use it. We can change the way we handle the input and update the camera. We will set the following controls:
 
 * Keys “A” and “D” to move the camera to the left and right (x axis) respectively.
 * Keys “W” and “S” to move the camera forward and backwards (z axis) respectively.
